@@ -6,6 +6,9 @@ services:
     container_name: node-exporter
     restart: unless-stopped
 
+    depends_on:
+      - prometheus
+
     ports:
       - "9100:9100"
 
@@ -16,12 +19,11 @@ services:
 
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules:/etc/prometheus/rules:ro
 
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-
-    depends_on:
-      - node-exporter
+      - '--web.enable-lifecycle'
 
     ports:
       - "9090:9090"
@@ -36,7 +38,6 @@ services:
       - ./grafana/dashboards:/var/lib/grafana/dashboards
 
     depends_on:
-      - node-exporter
       - prometheus
 
     ports:
@@ -86,6 +87,36 @@ services:
 
     depends_on:
       - loki
+
+  
+  alertmanager:    
+    image: prom/alertmanager:v0.32.1
+    container_name: alertmanager
+    restart: unless-stopped
+
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+
+    ports:
+      - "9093:9093"
+
+        
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.28.0
+    container_name: blackbox-exporter
+    restart: unless-stopped
+
+    command:
+      - --config.file=/etc/blackbox_exporter/config.yml
+
+    volumes:
+      - ./blackbox/config.yml:/etc/blackbox_exporter/config.yml:ro
+
+    ports:
+      - "9115:9115"
 
 
 volumes:
