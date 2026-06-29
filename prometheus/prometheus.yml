@@ -9,20 +9,20 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-            - 192.168.0.199:9093
+            - alertmanager:9093
 
 scrape_configs:
   - job_name: 'node-exporter'
     static_configs:
-      - targets: ['192.168.0.199:9100']
+      - targets: ['node-exporter:9100']
   
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['192.168.0.199:9090']
+      - targets: ['prometheus:9090']
 
   - job_name: 'cAlerts'
     static_configs:
-      - targets: ['192.168.0.199:8080']
+      - targets: ['cAdvisor:8080']
 
   - job_name: blackbox-http
 
@@ -46,4 +46,4 @@ scrape_configs:
         target_label: instance
 
       - target_label: __address__
-        replacement: 192.168.0.199:9115
+        replacement: blackbox-exporter:9115
