@@ -120,7 +120,7 @@ docker compose up --build
 | cAdvisor          | 8080     |
 | Loki              | 3100     |
 | Blackbox Exporter | 9115     |
-| Promtail          | Internal |
+| Promtail          | 9080     |
 
 ---
 
