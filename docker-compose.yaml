@@ -88,6 +88,9 @@ services:
     depends_on:
       - loki
 
+    ports:
+      - "9080:9080"
+
   
   alertmanager:    
     image: prom/alertmanager:v0.32.1
